@@ -31,3 +31,17 @@ export const getExistingData = (fetchedData, existingDataIndex) => {
     }
     return data;
 };
+
+export const calculatePrice = (promotions, product) => {
+    const promotion = promotions.find(promotion => promotion.product.id === product.id);
+    let price = product.price;
+    if(promotion) {
+        if(promotion.promotion.promotionType === 0) {
+            price *= 1.0 - promotion.promotion.discount;
+        } else {
+            price -= promotion.promotion.discount;
+        }
+        price = <>{price.toFixed(2)} (<s>{parseFloat(promotion.product.price).toFixed(2)}</s>)</>
+    }
+    return price;
+};
