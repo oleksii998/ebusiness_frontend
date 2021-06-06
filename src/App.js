@@ -41,6 +41,7 @@ import Promotion from "./components/promotions/Promotion";
 import Promotions from "./components/promotions/Promotions";
 import {useReducer, useEffect} from "react";
 import {initialState, Reducer, PromotionContext} from "./components/Reducer";
+import AuthenticationHandler from "./components/user/AuthenticationHandler";
 
 function App() {
     const [promotionState, dispatchPromotion] = useReducer(Reducer, initialState);
@@ -186,6 +187,9 @@ function App() {
                     <Route exact path="/promotions/:id/modify">
                         <ServerData fetchingFuncs={[getProducts, (params) => getPromotion(params.id)]}
                                     wrapper={PromotionForm}/>
+                    </Route>
+                    <Route exact path="/log-in">
+                        <AuthenticationHandler/>
                     </Route>
                 </Switch>
             </div>

@@ -1,6 +1,7 @@
 import axios from "axios";
 
 const serverUrl = "http://localhost:9000";
+export const authUrl = `${serverUrl}/authentication`;
 const usersUri = "users";
 const customersUri = "customers";
 const productsUri = "products";
@@ -11,6 +12,16 @@ const categoriesUri = "categories";
 const vouchersUri = "vouchers";
 const promotionsUri = "promotions";
 const transactionsUri = "transactions";
+
+axios.interceptors.request.use(
+    function(config) {
+        config.withCredentials = true;
+        return config;
+    },
+    function(error) {
+        return Promise.reject(error);
+    }
+);
 
 export const getUsers = (isCustomer) => {
     const uri = getUserUri(isCustomer);
@@ -192,3 +203,13 @@ export const getTransaction = (transactionId) => {
 export const addTransaction = (transactionData) => {
     return axios.post(`${serverUrl}/${transactionsUri}/add`, transactionData);
 };
+
+export const logOut = () => {
+    const csrfToken = getCookie("csrfToken");
+    return axios.post(`${serverUrl}/authentication/log-out?csrfToken=${csrfToken}`);
+};
+
+const getCookie = (name) => {
+    const cookies = document.cookie.split(";");
+    return cookies.find(cookie => cookie.includes(name))?.split("=")[1] || "";
+}
