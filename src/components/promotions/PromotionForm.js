@@ -5,10 +5,19 @@ import Form from "../general/Form";
 
 const PromotionForm = (props) => {
     const existingData = getExistingData(props.fetchedData, 1);
+    const calcMax = () => {
+        if(existingData?.promotion.promotionType === 1) {
+            return props.fetchedData[0].find(entry => entry.product.id === Number.parseInt(existingData?.product.id)).product.price;
+        }
+        return 1;
+    };
+    const calcStep = () => {
+        return existingData?.promotion.promotionType === 0 ? .01 : 1;
+    };
     const [state, setState] = useState({
         productId: existingData?.product.id || props.fetchedData[0][0]?.product.id,
         promotionType: existingData?.promotion.promotionType || 0,
-        discount: {value: existingData?.promotion.discount || 0, max: 1, step: .01}
+        discount: {value: existingData?.promotion.discount || 0, max: calcMax(), step: calcStep()}
     });
     const customOnChangeHandler = (currentState, name, value) => {
         if (name === "promotionType") {

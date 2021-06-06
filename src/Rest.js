@@ -16,6 +16,7 @@ const transactionsUri = "transactions";
 axios.interceptors.request.use(
     function(config) {
         config.withCredentials = true;
+        config.headers["Csrf-Token"] = getCookie("csrfToken");
         return config;
     },
     function(error) {
@@ -205,8 +206,7 @@ export const addTransaction = (transactionData) => {
 };
 
 export const logOut = () => {
-    const csrfToken = getCookie("csrfToken");
-    return axios.post(`${serverUrl}/authentication/log-out?csrfToken=${csrfToken}`);
+    return axios.post(`${serverUrl}/authentication/log-out`);
 };
 
 const getCookie = (name) => {

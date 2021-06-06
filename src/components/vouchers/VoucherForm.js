@@ -5,10 +5,19 @@ import Form from "../general/Form";
 
 const VoucherForm = (props) => {
     const existingData = getExistingData(props.fetchedData, 0);
+    const calcMax = () => {
+        if(existingData?.voucherType === 1) {
+            return Number.MAX_VALUE;
+        }
+        return 1;
+    };
+    const calcStep = () => {
+        return existingData?.voucherType === 0 ? .01 : 1;
+    };
     const [state, setState] = useState({
         name: existingData?.name || "",
         voucherType: existingData?.voucherType || 0,
-        discount: {value: existingData?.discount || 0, max: 1, step: .01},
+        discount: {value: existingData?.discount || 0, max: calcMax(), step: calcStep()},
     });
     const customOnChangeHandler = (currentState, name, value) => {
         if (name === "voucherType") {
